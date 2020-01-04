@@ -1,0 +1,121 @@
+<!doctype html>
+{{ if .username }}
+    <title>{{.username}}'s PolarisHub (Go v0.1)</title>
+{{ else }}
+    <title>PolarisHub (Go v0.1)</title>
+{{ end }}
+<link rel="stylesheet" href="/static/css/bootstrap.css">
+<link rel="stylesheet" href="/static/css/all.css">
+<link rel="icon" href="/static/favicon.ico"type=”image/x-icon”>
+<meta name="viewpoint" content="user-scalable=no, width=device-width, initial-scale=1.0">
+
+<div class="container">
+    <div class="my-5">
+    <div class="d-flex justify-content-between">
+        <div class="d-flex  align-items-end">
+        {{ if .username }}
+            <h1 class="mr-3">{{.username}}'s PolarisHub</h1> <p> (Go v0.1)</p>
+        {{ else }}
+            <h1 class="mr-3">PolarisHub</h1> <p>(Go v0.1)</p>
+        {{ end }}
+        </div>
+
+        <div>
+            <a href="https://github.com/XieGuochao/polarishub_flask" target="_blank">
+                <button type="button" class="btn btn-outline-primary my-1">
+                    <i class="fab fa-github"></i> 
+                </button>
+            </a>
+            <a href="/about"> 
+                <button type="button" class="btn btn-outline-primary my-1 ml-3 mr-3">
+                    About / 关于
+                </button>
+            </a>
+            <a href="/help"> 
+                <button type="button" class="btn btn-outline-primary my-1 float-right">
+                    Help / 帮助
+                </button>
+            </a>
+        </div>
+    </div>
+    <div>
+        <form action="/qr" method = "POST">
+        <!-- <a href="/qr?filepath=/files" class="float-right"> -->
+            <input type="text" style="display: none" id="filepath" name="filepath" value="/files">
+            <button type="submit" class="btn btn-outline-primary my-1 float-right">
+                <i class="fas fa-share-alt"></i> 
+            </button>
+        <!-- </a> -->
+        </form>
+    </div>
+
+    {{if .is_admin }}
+    <div class="d-flex flex-row">
+        <a href="/settings" class=" flex-fill">
+            <button type="button" class="btn btn-outline-primary my-1 btn-block">
+                 Settings / 设置
+            </button>
+        </a>
+        <button type="button" class="btn btn-outline-primary my-1 flex-fill" onclick="opendir()">Open Directory / 打开文件夹</button>
+        <br>
+        <a href="/halt" class=" flex-fill">
+            <button type="button" class="btn btn-outline-primary my-1 btn-block">
+                 Shutdown / 关闭
+            </button>
+        </a>
+        <script>
+            function opendir() {
+                fetch('/opendir?dir={{.cwd}}').then((res)=>{
+                    return res.status;
+                }).then((status)=>{
+                    if (status==200) {
+                        <!-- window.alert("Successfully open dir."); -->
+                    }
+                    else {
+                        window.alert("Open dir fails.");
+                    }
+                })
+            }
+        </script>
+        <br>
+    </div>
+    {{ end }}
+
+    </div>
+
+    <div class="">
+
+    
+    <ul class="list-group">
+        <li class="list-group-item">
+            <i class="fa fa-folder" aria-hidden="true"></i>
+            <a href="../" class="w">
+                ../
+            </a>
+        </li>
+        {{ range $k, $v := .dirs }}
+            <li class="list-group-item ">
+                {{ if $v.IsFile }}
+                    <i class="fa fa-file" aria-hidden="true"></i>
+                {{ else }}
+                    <i class="fa fa-folder" aria-hidden="true"></i>
+                {{ end }}
+                {{ if $v.IsFile }}
+                    <a href="{{ $v.Path }}" class="w">
+                {{ else }}
+                    <a href="{{ $v.Path }}/" class="w">
+                {{ end }}
+                    {{$v.Filename}}
+                </a>
+                <div class="float-right d-flex flex-row">
+                    <div class="mr-3">{{$v.Path}}</div>
+                    <form action = "/qr" method="POST">
+                        <input type="text" style="display: none" id="filepath" name="filepath" value="{{$v.Path}}">
+                        <button class="btn btn-outline-primary" type="submit"><i class="fas fa-share-alt"></i> </button>
+                    </form>
+                </div>
+            </li>
+        {{ end }}
+    </ul>
+    </div>
+</div>

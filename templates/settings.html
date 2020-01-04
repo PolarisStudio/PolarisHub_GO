@@ -1,0 +1,27 @@
+<!doctype html>
+<title>PolarisHub (Go v0.1)</title>
+<link rel="stylesheet" href="/static/css/bootstrap.css">
+<link rel="icon" href="/static/favicon.ico"type=”image/x-icon”>
+<meta name="viewpoint" content="user-scalable=no, width=device-width, initial-scale=1.0">
+
+<div class="container-fluid">
+    <div class="my-5 container">
+        <h1>Settings / 设置</h1>   
+        <a href="/"> 
+            <button button type="button" class="btn btn-outline-primary my-1">
+                Back Home / 返回首页 
+            </button>
+        </a>
+
+    </div>
+        
+    <div class="container">
+        <form action="/update_settings" method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="{{.username}}" minlength="1" required>
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">Update / 更新设置</button>
+        </form>
+    </div>
+</div>
