@@ -176,7 +176,7 @@ func authenticate(c *gin.Context) bool{
 }
 
 func getDirInfo(path string) ([]File, interface{}) {
-	baseIndex := strings.Index(path, "\\files")
+	baseIndex := strings.Index(path, "/files")
 	ip := LocalIp()
 	basePath := path[baseIndex: len(path)]
 	fileSlice := make([]File, 0)
